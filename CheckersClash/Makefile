@@ -1,3 +1,12 @@
+# Makefile for CheckersClash
+# 
+# Commands:
+# make            - Build the checkers_tests executable
+# make run_tests  - Run the tests
+# make debug_tests - Debug the tests using gdb
+# make valgrind_tests - Run the tests with Valgrind for memory checking
+# make clean      - Clean the build directory and remove the executable
+
 CXX = g++
 CXXFLAGS = -std=c++11 -Wall -I$(GTEST_DIR)/include -pthread
 GTEST_DIR = /usr/src/gtest
