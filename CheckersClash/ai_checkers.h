@@ -5,3 +5,7 @@
 #include <string>
 #include <unordered_map>
 
+
+enum class PieceType {
+    EMPTY, RED, BLACK, RED_KING, BLACK_KING
+};
