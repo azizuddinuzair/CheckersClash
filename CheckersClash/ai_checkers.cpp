@@ -255,3 +255,66 @@ std::vector<Move> CheckersGame::orderMoves(const std::vector<Move>& moves) const
     });
     return orderedMoves;
 }
+
+
+int CheckersGame::minimax(int depth, bool maximizingPlayer, int alpha, int beta) {
+    std::string boardStr = boardToString();
+    if (transpositionTable.find(boardStr) != transpositionTable.end()) {
+        return transpositionTable[boardStr];
+    }
+
+    if (depth == 0 || isGameOver()) {
+        int eval = evaluateBoard();
+        transpositionTable[boardStr] = eval;
+        return eval;
+    }
+
+    std::vector<Move> allMoves = getAllValidMoves(maximizingPlayer);
+    allMoves = orderMoves(allMoves); // Order the moves
+
+    if (maximizingPlayer) {
+        int maxEval = INT_MIN;
+        for (const Move& move : allMoves) {
+            // Make move
+            PieceType tempBoard[BOARD_SIZE][BOARD_SIZE];
+            std::copy(&board[0][0], &board[0][0] + BOARD_SIZE * BOARD_SIZE, &tempBoard[0][0]);
+            bool tempTurn = blackTurn;
+
+            makeMove(move);
+            int eval = minimax(depth - 1, false, alpha, beta);
+
+            // Undo move
+            std::copy(&tempBoard[0][0], &tempBoard[0][0] + BOARD_SIZE * BOARD_SIZE, &board[0][0]);
+            blackTurn = tempTurn;
+
+            maxEval = std::max(maxEval, eval);
+            alpha = std::max(alpha, eval);
+            if (beta <= alpha)
+                break;
+        }
+        transpositionTable[boardStr] = maxEval;
+        return maxEval;
+    } else {
+        int minEval = INT_MAX;
+        for (const Move& move : allMoves) {
+            // Make move
+            PieceType tempBoard[BOARD_SIZE][BOARD_SIZE];
+            std::copy(&board[0][0], &board[0][0] + BOARD_SIZE * BOARD_SIZE, &tempBoard[0][0]);
+            bool tempTurn = blackTurn;
+
+            makeMove(move);
+            int eval = minimax(depth - 1, true, alpha, beta);
+
+            // Undo move
+            std::copy(&tempBoard[0][0], &tempBoard[0][0] + BOARD_SIZE * BOARD_SIZE, &board[0][0]);
+            blackTurn = tempTurn;
+
+            minEval = std::min(minEval, eval);
+            beta = std::min(beta, eval);
+            if (beta <= alpha)
+                break;
+        }
+        transpositionTable[boardStr] = minEval;
+        return minEval;
+    }
+}
