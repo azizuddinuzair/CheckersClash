@@ -213,3 +213,31 @@ bool CheckersGame::makeMove(const Move& move) {
     blackTurn = !blackTurn;
     return true;
 }
+
+
+int CheckersGame::evaluateBoard() const {
+    int score = 0;
+    for (int row = 0; row < BOARD_SIZE; row++) {
+        for (int col = 0; col < BOARD_SIZE; col++) {
+            switch (board[row][col]) {
+                case PieceType::BLACK:
+                    score += 10;
+                    score += row; // Preference for advancing
+                    break;
+                case PieceType::BLACK_KING:
+                    score += 15;
+                    break;
+                case PieceType::RED:
+                    score -= 10;
+                    score -= (BOARD_SIZE - 1 - row); // Preference for advancing
+                    break;
+                case PieceType::RED_KING:
+                    score -= 15;
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+    return score;
+}
