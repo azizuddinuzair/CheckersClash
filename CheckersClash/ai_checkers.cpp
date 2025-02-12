@@ -241,3 +241,17 @@ int CheckersGame::evaluateBoard() const {
     }
     return score;
 }
+
+
+std::vector<Move> CheckersGame::orderMoves(const std::vector<Move>& moves) const {
+    std::vector<Move> orderedMoves = moves;
+    std::sort(orderedMoves.begin(), orderedMoves.end(), [this](const Move& a, const Move& b) {
+        // Prioritize jump moves
+        if (a.isJump != b.isJump) {
+            return a.isJump > b.isJump;
+        }
+        // Further ordering criteria can be added here
+        return false;
+    });
+    return orderedMoves;
+}
