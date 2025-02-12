@@ -318,3 +318,93 @@ int CheckersGame::minimax(int depth, bool maximizingPlayer, int alpha, int beta)
         return minEval;
     }
 }
+
+
+Move CheckersGame::getBestMove(int difficulty) {
+    int depth;
+    switch (difficulty) {
+        case 1: depth = 2; break;  // Easy
+        case 2: depth = 4; break;  // Medium
+        case 3: depth = 6; break;  // Hard
+        default: depth = 4; break;
+    }
+    
+    std::vector<Move> allMoves = getAllValidMoves(blackTurn);
+    Move bestMove = allMoves[0];
+    int bestValue = INT_MIN;
+    
+    for (const Move& move : allMoves) {
+        // Make move
+        PieceType tempBoard[BOARD_SIZE][BOARD_SIZE];
+        std::copy(&board[0][0], &board[0][0] + BOARD_SIZE * BOARD_SIZE, &tempBoard[0][0]);
+        bool tempTurn = blackTurn;
+        
+        makeMove(move);
+        int moveValue = minimax(depth - 1, false, INT_MIN, INT_MAX);
+        
+        // Undo move
+        std::copy(&tempBoard[0][0], &tempBoard[0][0] + BOARD_SIZE * BOARD_SIZE, &board[0][0]);
+        blackTurn = tempTurn;
+        
+        if (moveValue > bestValue) {
+            bestValue = moveValue;
+            bestMove = move;
+        }
+    }
+    
+    return bestMove;
+}
+
+PieceType CheckersGame::getPiece(int row, int col) const {
+    if (row < 0 || row >= BOARD_SIZE || col < 0 || col >= BOARD_SIZE) {
+        return PieceType::EMPTY;
+    }
+    return board[row][col];
+}
+
+bool CheckersGame::isGameOver() const {
+    bool redHasMoves = false;
+    bool blackHasMoves = false;
+
+    for (int row = 0; row < BOARD_SIZE; row++) {
+        for (int col = 0; col < BOARD_SIZE; col++) {
+            PieceType piece = getPiece(row, col);
+            if (piece == PieceType::RED || piece == PieceType::RED_KING) {
+                if (!getValidMoves(row, col).empty()) {
+                    redHasMoves = true;
+                }
+            } else if (piece == PieceType::BLACK || piece == PieceType::BLACK_KING) {
+                if (!getValidMoves(row, col).empty()) {
+                    blackHasMoves = true;
+                }
+            }
+        }
+    }
+
+    return !redHasMoves || !blackHasMoves;
+}
+
+bool CheckersGame::isValidMove(const Move& move) const {
+    std::vector<Move> validMoves = getValidMoves(move.startRow, move.startCol);
+    for (const Move& validMove : validMoves) {
+        if (validMove.startRow == move.startRow && validMove.startCol == move.startCol &&
+            validMove.endRow == move.endRow && validMove.endCol == move.endCol) {
+            return true;
+        }
+    }
+    return false;
+}
+
+std::string CheckersGame::boardToString() const {
+    std::string boardStr;
+    for (int row = 0; row < BOARD_SIZE; ++row) {
+        for (int col = 0; col < BOARD_SIZE; ++col) {
+            boardStr += std::to_string(static_cast<int>(board[row][col]));
+        }
+    }
+    return boardStr;
+}
+
+bool CheckersGame::isBlackTurn() const {
+    return blackTurn;
+}
