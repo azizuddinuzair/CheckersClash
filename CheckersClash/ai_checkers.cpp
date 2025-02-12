@@ -69,3 +69,8 @@ std::pair<int, int> CheckersGame::convertPosition(const std::string& pos) const 
     int row = pos[1] - '1';
     return {row, col};
 }
+
+
+std::string CheckersGame::convertToNotation(int row, int col) const {
+    return std::string(1, 'a' + col) + std::string(1, '1' + row);
+}
