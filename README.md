@@ -24,13 +24,13 @@ Game Rules:
   - Kings can move forward and backward across the board.
 
 Future Goals:
-  2-Player Chess: Build a chess game that allows two players to play against each other, either locally or online.
-  Chess Tutorial: Create an interactive tutorial for beginners to learn how to play chess, covering rules, strategies, and basic tactics.
-  Chess Puzzles: Implement a series of puzzles where players have to checkmate their opponent within one move, enhancing their tactical thinking.
+  - 2-Player Chess: Build a chess game that allows two players to play against each other, either locally or online.
+  - Chess Tutorial: Create an interactive tutorial for beginners to learn how to play chess, covering rules, strategies, and basic tactics.
+  - Chess Puzzles: Implement a series of puzzles where players have to checkmate their opponent within one move, enhancing their tactical thinking.
   
 Collaborators
-Firas Al Halaq - Co-creator of the project (add stuff here)
-Uzair Azizuddin - Co-creator; responsible for overall design, AI implementation, and gameplay mechanics.
+  - Firas Al Halaq: Co-creator of the project (add stuff here)
+  - Uzair Azizuddin: Co-creator; responsible for overall design, AI implementation, and gameplay mechanics.
 
 License
 This project is open-source and available under the MIT License. See the LICENSE file for more details.
