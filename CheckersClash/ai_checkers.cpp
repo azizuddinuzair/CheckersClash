@@ -107,3 +107,26 @@ void CheckersGame::getJumpMoves(int row, int col, std::vector<Move>& moves) cons
         }
     }
 }
+
+
+void CheckersGame::getNormalMoves(int row, int col, std::vector<Move>& moves) const {
+    PieceType currentPiece = board[row][col];
+    bool isKing = (currentPiece == PieceType::RED_KING || currentPiece == PieceType::BLACK_KING);
+    int directions[4][2] = {{1, 1}, {1, -1}, {-1, 1}, {-1, -1}};
+    
+    for (auto [dr, dc] : directions) {
+        if (!isKing && ((currentPiece == PieceType::RED && dr < 0) || 
+                       (currentPiece == PieceType::BLACK && dr > 0))) {
+            continue;
+        }
+        
+        int newRow = row + dr;
+        int newCol = col + dc;
+        
+        if (newRow >= 0 && newRow < BOARD_SIZE && newCol >= 0 && newCol < BOARD_SIZE &&
+            board[newRow][newCol] == PieceType::EMPTY) {
+            Move move = {row, col, newRow, newCol, false, {}};
+            moves.push_back(move);
+        }
+    }
+}
