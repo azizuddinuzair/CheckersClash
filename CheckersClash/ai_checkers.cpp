@@ -184,3 +184,32 @@ std::vector<Move> CheckersGame::getAllValidMoves(bool isBlackTurn) const {
     // If there are jump moves available, they must be taken
     return jumpMoves.empty() ? allMoves : jumpMoves;
 }
+
+
+bool CheckersGame::makeMove(const Move& move) {
+    if (!isValidMove(move)) {
+        return false;
+    }
+    
+    // Move the piece
+    board[move.endRow][move.endCol] = board[move.startRow][move.startCol];
+    board[move.startRow][move.startCol] = PieceType::EMPTY;
+    
+    // Handle captures
+    if (move.isJump) {
+        for (const auto& capture : move.capturedPieces) {
+            board[capture.first][capture.second] = PieceType::EMPTY;
+        }
+    }
+    
+    // King promotion
+    if (move.endRow == 0 && board[move.endRow][move.endCol] == PieceType::BLACK) {
+        board[move.endRow][move.endCol] = PieceType::BLACK_KING;
+    }
+    else if (move.endRow == BOARD_SIZE - 1 && board[move.endRow][move.endCol] == PieceType::RED) {
+        board[move.endRow][move.endCol] = PieceType::RED_KING;
+    }
+    
+    blackTurn = !blackTurn;
+    return true;
+}
