@@ -47,6 +47,6 @@ class CheckersGame {
         void getNormalMoves(int row, int col, std::vector<Move>& moves) const;
         bool isValidMove(const Move& move) const;
         std::vector<Move> orderMoves(const std::vector<Move>& moves) const; 
-    };
-    
-    #endif
+};
+ 
+#endif
