@@ -63,3 +63,9 @@ bool CheckersGame::isValidPosition(const std::string& pos) const {
     return (col >= 'a' && col <= 'h' && row >= '1' && row <= '8');
 }
 
+
+std::pair<int, int> CheckersGame::convertPosition(const std::string& pos) const {
+    int col = pos[0] - 'a';
+    int row = pos[1] - '1';
+    return {row, col};
+}
