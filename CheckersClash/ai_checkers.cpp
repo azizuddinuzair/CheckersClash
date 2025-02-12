@@ -74,3 +74,36 @@ std::pair<int, int> CheckersGame::convertPosition(const std::string& pos) const 
 std::string CheckersGame::convertToNotation(int row, int col) const {
     return std::string(1, 'a' + col) + std::string(1, '1' + row);
 }
+
+
+void CheckersGame::getJumpMoves(int row, int col, std::vector<Move>& moves) const {
+    PieceType currentPiece = board[row][col];
+    bool isKing = (currentPiece == PieceType::RED_KING || currentPiece == PieceType::BLACK_KING);
+    int directions[4][2] = {{1, 1}, {1, -1}, {-1, 1}, {-1, -1}};
+    
+    for (auto [dr, dc] : directions) {
+        if (!isKing && ((currentPiece == PieceType::RED && dr < 0) || 
+                       (currentPiece == PieceType::BLACK && dr > 0))) {
+            continue;
+        }
+        
+        int newRow = row + dr * 2;
+        int newCol = col + dc * 2;
+        int jumpRow = row + dr;
+        int jumpCol = col + dc;
+        
+        if (newRow >= 0 && newRow < BOARD_SIZE && newCol >= 0 && newCol < BOARD_SIZE &&
+            board[newRow][newCol] == PieceType::EMPTY) {
+            
+            PieceType jumpedPiece = board[jumpRow][jumpCol];
+            bool isOpponent = (currentPiece == PieceType::RED || currentPiece == PieceType::RED_KING) ?
+                            (jumpedPiece == PieceType::BLACK || jumpedPiece == PieceType::BLACK_KING) :
+                            (jumpedPiece == PieceType::RED || jumpedPiece == PieceType::RED_KING);
+            
+            if (isOpponent) {
+                Move move = {row, col, newRow, newCol, true, {{jumpRow, jumpCol}}};
+                moves.push_back(move);
+            }
+        }
+    }
+}
