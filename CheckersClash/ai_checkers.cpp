@@ -1,3 +1,34 @@
+/**
+ * This file contains the implementation of the CheckersGame class, which provides
+ * the functionality for initializing the game board, printing the board, validating
+ * positions and moves, generating valid moves, making moves, evaluating the board,
+ * and determining the best move using the minimax algorithm with alpha-beta pruning.
+ * 
+ * The CheckersGame class supports both normal and jump moves, king promotion, and
+ * game over detection. It also includes a transposition table to store evaluated
+ * board states for optimization.
+ * 
+ * The main methods include:
+ * - CheckersGame(): Constructor to initialize the game board.
+ * - printBoard(): Prints the current state of the game board.
+ * - isValidPosition(): Checks if a given position is valid on the board.
+ * - convertPosition(): Converts a position from notation to row and column indices.
+ * - convertToNotation(): Converts row and column indices to board notation.
+ * - getJumpMoves(): Generates all possible jump moves for a piece.
+ * - getNormalMoves(): Generates all possible normal moves for a piece.
+ * - getValidMoves(): Returns all valid moves for a piece at a given position.
+ * - getAllValidMoves(): Returns all valid moves for the current player.
+ * - makeMove(): Executes a move on the board.
+ * - evaluateBoard(): Evaluates the board and returns a score.
+ * - orderMoves(): Orders moves based on priority (e.g., jump moves first).
+ * - minimax(): Implements the minimax algorithm with alpha-beta pruning.
+ * - getBestMove(): Determines the best move for the current player based on difficulty.
+ * - getPiece(): Returns the piece at a given position.
+ * - isGameOver(): Checks if the game is over.
+ * - isValidMove(): Checks if a given move is valid.
+ * - boardToString(): Converts the board to a string representation for the transposition table.
+ * - isBlackTurn(): Returns whether it is the black player's turn.
+ */
 #include "ai_checkers.h"
 #include <iostream>
 #include <algorithm>
