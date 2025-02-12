@@ -130,3 +130,29 @@ void CheckersGame::getNormalMoves(int row, int col, std::vector<Move>& moves) co
         }
     }
 }
+
+
+std::vector<Move> CheckersGame::getValidMoves(int row, int col) const {
+    std::vector<Move> moves;
+    
+    if (row < 0 || row >= BOARD_SIZE || col < 0 || col >= BOARD_SIZE) {
+        return moves;
+    }
+    
+    PieceType currentPiece = board[row][col];
+    bool isCurrentPlayerPiece = (blackTurn && (currentPiece == PieceType::BLACK || 
+                                              currentPiece == PieceType::BLACK_KING)) ||
+                               (!blackTurn && (currentPiece == PieceType::RED || 
+                                             currentPiece == PieceType::RED_KING));
+    
+    if (!isCurrentPlayerPiece) {
+        return moves;
+    }
+    
+    getJumpMoves(row, col, moves);
+    if (moves.empty()) {
+        getNormalMoves(row, col, moves);
+    }
+    
+    return moves;
+}
