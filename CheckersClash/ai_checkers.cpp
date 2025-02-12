@@ -29,3 +29,28 @@ CheckersGame::CheckersGame() : blackTurn(false) {
         }
     }
 }
+
+
+void CheckersGame::printBoard() const {
+    std::cout << "  a b c d e f g h\n";
+    std::cout << "  -----------------\n";
+    
+    for (int row = BOARD_SIZE - 1; row >= 0; row--) {
+        std::cout << row + 1 << " |";
+        for (int col = 0; col < BOARD_SIZE; col++) {
+            char piece = '.';
+            switch (board[row][col]) {
+                case PieceType::RED: piece = 'r'; break;
+                case PieceType::BLACK: piece = 'b'; break;
+                case PieceType::RED_KING: piece = 'R'; break;
+                case PieceType::BLACK_KING: piece = 'B'; break;
+                default: break;
+            }
+            std::cout << " " << piece;
+        }
+        std::cout << " | " << row + 1 << "\n";
+    }
+    
+    std::cout << "  -----------------\n";
+    std::cout << "  a b c d e f g h\n";
+}
