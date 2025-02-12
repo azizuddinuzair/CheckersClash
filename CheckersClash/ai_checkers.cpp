@@ -156,3 +156,31 @@ std::vector<Move> CheckersGame::getValidMoves(int row, int col) const {
     
     return moves;
 }
+
+
+std::vector<Move> CheckersGame::getAllValidMoves(bool isBlackTurn) const {
+    std::vector<Move> allMoves;
+    std::vector<Move> jumpMoves;
+
+    for (int row = 0; row < BOARD_SIZE; row++) {
+        for (int col = 0; col < BOARD_SIZE; col++) {
+            PieceType piece = getPiece(row, col);
+            bool isCurrentPlayerPiece = (isBlackTurn && (piece == PieceType::BLACK || 
+                piece == PieceType::BLACK_KING)) || (!isBlackTurn && (piece == PieceType::RED || piece == PieceType::RED_KING));
+
+            if (isCurrentPlayerPiece) {
+                std::vector<Move> moves = getValidMoves(row, col);
+                for (const Move& move : moves) {
+                    if (move.isJump) {
+                        jumpMoves.push_back(move);
+                    } else {
+                        allMoves.push_back(move);
+                    }
+                }
+            }
+        }
+    }
+
+    // If there are jump moves available, they must be taken
+    return jumpMoves.empty() ? allMoves : jumpMoves;
+}
