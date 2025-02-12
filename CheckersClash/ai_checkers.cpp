@@ -54,3 +54,12 @@ void CheckersGame::printBoard() const {
     std::cout << "  -----------------\n";
     std::cout << "  a b c d e f g h\n";
 }
+
+
+bool CheckersGame::isValidPosition(const std::string& pos) const {
+    if (pos.length() != 2) return false;
+    char col = pos[0];
+    char row = pos[1];
+    return (col >= 'a' && col <= 'h' && row >= '1' && row <= '8');
+}
+
