@@ -32,7 +32,7 @@ class CheckersGame {
         std::pair<int, int> convertPosition(const std::string& pos) const;
         std::string convertToNotation(int row, int col) const;
         PieceType getPiece(int row, int col) const;
-        bool isBlackTurn() const { return blackTurn; }
+        bool isBlackTurn() const;
     
     private:
         static const int BOARD_SIZE = 8;
