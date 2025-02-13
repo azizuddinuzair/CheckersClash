@@ -32,7 +32,7 @@ class CheckersGame {
         std::pair<int, int> convertPosition(const std::string& pos) const;
         std::string convertToNotation(int row, int col) const;
         PieceType getPiece(int row, int col) const;
-        bool isBlackTurn() const { return blackTurn; }
+        bool isBlackTurn() const;
     
     private:
         static const int BOARD_SIZE = 8;
@@ -42,6 +42,7 @@ class CheckersGame {
         std::string boardToString() const;
         
         int minimax(int depth, bool maximizingPlayer, int alpha, int beta);
+        void undoMove(const Move& move);
         int evaluateBoard() const;
         void getJumpMoves(int row, int col, std::vector<Move>& moves) const;
         void getNormalMoves(int row, int col, std::vector<Move>& moves) const;
