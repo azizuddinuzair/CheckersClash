@@ -245,6 +245,28 @@ bool CheckersGame::makeMove(const Move& move) {
     return true;
 }
 
+void CheckersGame::undoMove(const Move& move) {
+    // Move the piece back to its original position
+    board[move.startRow][move.startCol] = board[move.endRow][move.endCol];
+    board[move.endRow][move.endCol] = PieceType::EMPTY;
+
+    // Restore captured pieces
+    if (move.isJump) {
+        for (const auto& capture : move.capturedPieces) {
+            board[capture.first][capture.second] = (blackTurn ? PieceType::RED : PieceType::BLACK);
+        }
+    }
+
+    // Undo king promotion
+    if (move.endRow == 0 && board[move.startRow][move.startCol] == PieceType::BLACK_KING) {
+        board[move.startRow][move.startCol] = PieceType::BLACK;
+    } else if (move.endRow == BOARD_SIZE - 1 && board[move.startRow][move.startCol] == PieceType::RED_KING) {
+        board[move.startRow][move.startCol] = PieceType::RED;
+    }
+
+    // Revert the turn
+    blackTurn = !blackTurn;
+}
 
 int CheckersGame::evaluateBoard() const {
     int score = 0;
@@ -306,17 +328,9 @@ int CheckersGame::minimax(int depth, bool maximizingPlayer, int alpha, int beta)
     if (maximizingPlayer) {
         int maxEval = INT_MIN;
         for (const Move& move : allMoves) {
-            // Make move
-            PieceType tempBoard[BOARD_SIZE][BOARD_SIZE];
-            std::copy(&board[0][0], &board[0][0] + BOARD_SIZE * BOARD_SIZE, &tempBoard[0][0]);
-            bool tempTurn = blackTurn;
-
             makeMove(move);
             int eval = minimax(depth - 1, false, alpha, beta);
-
-            // Undo move
-            std::copy(&tempBoard[0][0], &tempBoard[0][0] + BOARD_SIZE * BOARD_SIZE, &board[0][0]);
-            blackTurn = tempTurn;
+            undoMove(move);
 
             maxEval = std::max(maxEval, eval);
             alpha = std::max(alpha, eval);
@@ -328,17 +342,9 @@ int CheckersGame::minimax(int depth, bool maximizingPlayer, int alpha, int beta)
     } else {
         int minEval = INT_MAX;
         for (const Move& move : allMoves) {
-            // Make move
-            PieceType tempBoard[BOARD_SIZE][BOARD_SIZE];
-            std::copy(&board[0][0], &board[0][0] + BOARD_SIZE * BOARD_SIZE, &tempBoard[0][0]);
-            bool tempTurn = blackTurn;
-
             makeMove(move);
             int eval = minimax(depth - 1, true, alpha, beta);
-
-            // Undo move
-            std::copy(&tempBoard[0][0], &tempBoard[0][0] + BOARD_SIZE * BOARD_SIZE, &board[0][0]);
-            blackTurn = tempTurn;
+            undoMove(move);
 
             minEval = std::min(minEval, eval);
             beta = std::min(beta, eval);
