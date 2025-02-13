@@ -27,12 +27,20 @@ OBJ_FILES = $(patsubst $(SRC_DIR)/%.cpp, $(BUILD_DIR)/%.o, $(SRC_FILES))
 TEST_OBJ_FILES = $(patsubst $(TEST_DIR)/%.cpp, $(BUILD_DIR)/%.o, $(TEST_FILES))
 
 # Targets
+.PHONY: all clean run_tests debug_tests valgrind_tests
+
 all: checkers_tests
 
-$(BUILD_DIR)/%.o: $(SRC_DIR)/%.cpp
+# Create build directory
+$(BUILD_DIR):
+	mkdir -p $(BUILD_DIR)
+
+# Compile source files
+$(BUILD_DIR)/%.o: $(SRC_DIR)/%.cpp | $(BUILD_DIR)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-$(BUILD_DIR)/%.o: $(TEST_DIR)/%.cpp
+# Compile test files
+$(BUILD_DIR)/%.o: $(TEST_DIR)/%.cpp | $(BUILD_DIR)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 checkers_tests: $(OBJ_FILES) $(TEST_OBJ_FILES)
@@ -48,4 +56,4 @@ valgrind_tests: checkers_tests
 	valgrind --leak-check=full ./checkers_tests
 
 clean:
-	rm -rf $(BUILD_DIR)/*.o checkers_tests
+	rm -rf $(BUILD_DIR) checkers_tests
