@@ -1,4 +1,4 @@
-//Creators: Uzair Azizuddinm Firas Al Halaq
+//Creators: Uzair Azizuddin Firas Al Halaq
 #ifndef AI_CHECKERS_H
 #define AI_CHECKERS_H
 
