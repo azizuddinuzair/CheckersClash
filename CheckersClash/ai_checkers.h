@@ -1,3 +1,4 @@
+//Creators: Uzair Azizuddinm Firas Al Halaq
 #ifndef AI_CHECKERS_H
 #define AI_CHECKERS_H
 
@@ -17,7 +18,6 @@ struct Move {
     bool isJump;
     std::vector<std::pair<int, int>> capturedPieces;
 };
-
 
 class CheckersGame {
     public:
