@@ -9,7 +9,7 @@
 
 CXX = g++
 CXXFLAGS = -std=c++11 -Wall -I$(GTEST_DIR)/include -pthread
-GTEST_DIR = /usr/src/gtest
+GTEST_DIR = /usr/local/opt/googletest
 
 # Directories
 SRC_DIR = .
@@ -44,13 +44,13 @@ $(BUILD_DIR)/%.o: $(TEST_DIR)/%.cpp | $(BUILD_DIR)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 checkers_tests: $(OBJ_FILES) $(TEST_OBJ_FILES)
-	$(CXX) $(CXXFLAGS) $^ -o $@ -lgtest -lgtest_main
+	$(CXX) $(CXXFLAGS) $^ -o $@ -L$(GTEST_DIR)/lib -lgtest -lgtest_main
 
 run_tests: checkers_tests
 	./checkers_tests
 
 debug_tests: checkers_tests
-	gdb ./checkers_tests
+	lldb ./checkers_tests
 
 valgrind_tests: checkers_tests
 	valgrind --leak-check=full ./checkers_tests
